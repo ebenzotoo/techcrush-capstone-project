@@ -13,6 +13,16 @@ const pool = new Pool({
   port: 5432,
 });
 
+app.get('/api/projects', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM projects');
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server Error');
+  }
+});
+
 app.get('/api/init', async (req, res) => {
   try {
     await pool.query(`
