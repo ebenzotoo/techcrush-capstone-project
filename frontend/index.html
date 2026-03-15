@@ -31,24 +31,30 @@
     </div>
 
 <script>
-        fetch('https://capstone-backend-7vp2.onrender.com')
-            .then(response => response.json())
-            .then(data => {
-                const projectList = document.getElementById('project-list');
-                projectList.innerHTML = '';
-                data.forEach(project => {
-                    projectList.innerHTML += `
-                        <div class="project-card">
-                            <div class="project-title">${project.title}</div>
-                            <div class="tech-stack">Built with: ${project.tech_stack}</div>
-                        </div>
-                    `;
-                });
-            })
-            .catch(error => {
-                document.getElementById('project-list').innerHTML = '<p>Error connecting to the database backend.</p>';
-                console.error('Error:', error);
+   
+    fetch('https://capstone-backend-7vp2.onrender.com/api/projects')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const projectList = document.getElementById('project-list');
+            projectList.innerHTML = '';
+            data.forEach(project => {
+                projectList.innerHTML += `
+                    <div class="project-card">
+                        <div class="project-title">${project.title}</div>
+                        <div class="tech-stack">Built with: ${project.tech_stack}</div>
+                    </div>
+                `;
             });
-    </script>
+        })
+        .catch(error => {
+            document.getElementById('project-list').innerHTML = '<p>Error connecting to the database backend.</p>';
+            console.error('Error:', error);
+        });
+</script>
 </body>
 </html>
