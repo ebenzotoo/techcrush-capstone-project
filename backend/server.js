@@ -13,13 +13,24 @@ const pool = new Pool({
   port: 5432,
 });
 
-app.get('/api/projects', async (req, res) => {
+app.get('/api/init', async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM projects');
-    res.json(result.rows);
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS projects (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        tech_stack VARCHAR(255) NOT NULL
+      );
+      TRUNCATE TABLE projects;
+      INSERT INTO projects (title, tech_stack) VALUES
+      ('MentMate Platform', 'Flutter, Supabase'),
+      ('Ghana Law Society Portal', 'WordPress, PHP'),
+      ('Personal Portfolio', 'Next.js, Supabase');
+    `);
+    res.send('Database initialized successfully! You can now check your frontend.');
   } catch (err) {
     console.error(err);
-    res.status(500).send('Server Error');
+    res.status(500).send('Error: ' + err.message);
   }
 });
 
