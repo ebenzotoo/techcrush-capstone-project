@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Group 5 | Cloud Deployment Project</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      min-height: 100vh;
+      color: #e0e0e0;
+    }
+
+    header {
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header h1 {
+      font-size: 1.6rem;
+      color: #00d4ff;
+      letter-spacing: 1px;
+    }
+
+    header span {
+      font-size: 0.85rem;
+      color: #aaa;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 80px 20px 50px;
+    }
+
+    .hero .badge {
+      display: inline-block;
+      background: rgba(0, 212, 255, 0.15);
+      border: 1px solid #00d4ff;
+      color: #00d4ff;
+      padding: 6px 18px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .hero h2 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+
+    .hero h2 span {
+      color: #00d4ff;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: #aab4be;
+      max-width: 600px;
+      margin: 0 auto 40px;
+      line-height: 1.7;
+    }
+
+    .status-bar {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 200, 100, 0.1);
+      border: 1px solid #00c864;
+      border-radius: 20px;
+      padding: 8px 20px;
+      font-size: 0.85rem;
+      color: #00c864;
+    }
+
+    .status-bar .dot {
+      width: 8px;
+      height: 8px;
+      background: #00c864;
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      max-width: 1100px;
+      margin: 60px auto;
+      padding: 0 30px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 30px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: #00d4ff;
+    }
+
+    .card .icon {
+      font-size: 2rem;
+      margin-bottom: 14px;
+    }
+
+    .card h3 {
+      font-size: 1rem;
+      color: #00d4ff;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .card p, .card ul {
+      font-size: 0.9rem;
+      color: #aab4be;
+      line-height: 1.7;
+    }
+
+    .card ul {
+      padding-left: 16px;
+    }
+
+    .stack-section {
+      max-width: 1100px;
+      margin: 0 auto 60px;
+      padding: 0 30px;
+    }
+
+    .stack-section h2 {
+      text-align: center;
+      font-size: 1.4rem;
+      color: #ffffff;
+      margin-bottom: 30px;
+      letter-spacing: 1px;
+    }
+
+    .tech-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .tech-pill {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px;
+      padding: 10px 22px;
+      font-size: 0.88rem;
+      color: #e0e0e0;
+    }
+
+    .tech-pill span {
+      color: #00d4ff;
+      font-weight: 600;
+    }
+
+    .team-section {
+      max-width: 1100px;
+      margin: 0 auto 80px;
+      padding: 0 30px;
+      text-align: center;
+    }
+
+    .team-section h2 {
+      font-size: 1.4rem;
+      color: #ffffff;
+      margin-bottom: 30px;
+      letter-spacing: 1px;
+    }
+
+    .team-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+    }
+
+    .member {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 18px 28px;
+      min-width: 180px;
+    }
+
+    .member .name {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .member .role {
+      font-size: 0.78rem;
+      color: #00d4ff;
+      margin-top: 4px;
+    }
+
+    footer {
+      background: rgba(0,0,0,0.3);
+      border-top: 1px solid rgba(255,255,255,0.07);
+      text-align: center;
+      padding: 24px;
+      font-size: 0.82rem;
+      color: #555;
+    }
+
+    footer span {
+      color: #00d4ff;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>&#9729; Group 5 Cloud</h1>
+    <span>Ghana Communication Technology University &mdash; Capstone Project</span>
+  </header>
+
+  <section class="hero">
+    <div class="badge">&#128640; Live on Microsoft Azure</div>
+    <h2>Static Website<br/>Cloud <span>Deployment</span></h2>
+    <p>
+      Fully automated infrastructure provisioning on Azure using a single bash script.
+      No manual portal clicks &mdash; from zero to live in minutes.
+    </p>
+    <div class="status-bar">
+      <div class="dot"></div>
+      Server is Online &mdash; NGINX Running
+    </div>
+  </section>
+
+  <div class="cards">
+    <div class="card">
+      <div class="icon">&#127760;</div>
+      <h3>Networking</h3>
+      <ul>
+        <li>Resource Group: Group5-Web-RG-v6</li>
+        <li>Region: Denmark East</li>
+        <li>VNet: 10.0.0.0/16</li>
+        <li>Subnet: 10.0.1.0/24</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="icon">&#128274;</div>
+      <h3>Security (NSG)</h3>
+      <ul>
+        <li>Port 80 &mdash; HTTP (Inbound &amp; Outbound)</li>
+        <li>Port 443 &mdash; HTTPS (Inbound &amp; Outbound)</li>
+        <li>Port 22 &mdash; SSH Admin Access</li>
+        <li>All other traffic: Denied</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="icon">&#128187;</div>
+      <h3>Virtual Machine</h3>
+      <ul>
+        <li>Name: Group5WebServer</li>
+        <li>OS: Ubuntu 22.04 LTS</li>
+        <li>Size: Standard_B1s</li>
+        <li>SSH Key: Auto-generated</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="icon">&#9881;</div>
+      <h3>Web Server</h3>
+      <ul>
+        <li>Software: NGINX</li>
+        <li>Configured via cloud-init</li>
+        <li>Auto-starts on boot</li>
+        <li>Serves static HTML on port 80</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="icon">&#128260;</div>
+      <h3>CI/CD Pipeline</h3>
+      <ul>
+        <li>GitHub Actions workflow</li>
+        <li>Auto-deploys on push to main</li>
+        <li>SSH-based file sync to VM</li>
+        <li>NGINX reloaded after deploy</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="icon">&#128202;</div>
+      <h3>IaC Approach</h3>
+      <ul>
+        <li>100% Azure CLI scripted</li>
+        <li>Zero manual portal steps</li>
+        <li>Reproducible &amp; version-controlled</li>
+        <li>Single script: deploy.sh</li>
+      </ul>
+    </div>
+  </div>
+
+  <section class="stack-section">
+    <h2>Technology Stack</h2>
+    <div class="tech-grid">
+      <div class="tech-pill"><span>Cloud:</span> Microsoft Azure</div>
+      <div class="tech-pill"><span>IaC:</span> Azure CLI (Bash)</div>
+      <div class="tech-pill"><span>OS:</span> Ubuntu 22.04 LTS</div>
+      <div class="tech-pill"><span>Web Server:</span> NGINX</div>
+      <div class="tech-pill"><span>Init:</span> cloud-init</div>
+      <div class="tech-pill"><span>VCS:</span> GitHub</div>
+      <div class="tech-pill"><span>CI/CD:</span> GitHub Actions</div>
+      <div class="tech-pill"><span>Frontend:</span> HTML5 / CSS3</div>
+    </div>
+  </section>
+
+  <section class="team-section">
+    <h2>Group 5 &mdash; Team Members</h2>
+    <div class="team-grid">
+      <div class="member">
+        <div class="name">Ebenezer Zotoo</div>
+        <div class="role">Cloud Infrastructure</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Deployed on <span>Microsoft Azure</span> &mdash; Provisioned entirely via <span>Azure CLI</span> &mdash; Group 5 Capstone &copy; 2025
+  </footer>
+
+</body>
+</html>

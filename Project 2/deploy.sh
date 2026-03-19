@@ -21,37 +21,48 @@ az network vnet create --resource-group $RESOURCE_GROUP \
 echo "🔒 3. Creating Network Security Group (NSG)..."
 az network nsg create --resource-group $RESOURCE_GROUP --name $NSG_NAME
 
-echo "🔓 4. Configuring Inbound Rule for Web Traffic (Port 80 & 443)..."
+echo "🔓 4. Configuring Inbound Rules for Web Traffic (Port 80 & 443)..."
 az network nsg rule create --resource-group $RESOURCE_GROUP \
-  --nsg-name $NSG_NAME --name Allow-HTTP --protocol tcp \
-  --priority 100 --destination-port-range 80 --access allow
+  --nsg-name $NSG_NAME --name Allow-HTTP-Inbound --protocol tcp \
+  --direction Inbound --priority 100 --destination-port-range 80 --access allow
 
 az network nsg rule create --resource-group $RESOURCE_GROUP \
-  --nsg-name $NSG_NAME --name Allow-HTTPS --protocol tcp \
-  --priority 110 --destination-port-range 443 --access allow
+  --nsg-name $NSG_NAME --name Allow-HTTPS-Inbound --protocol tcp \
+  --direction Inbound --priority 110 --destination-port-range 443 --access allow
 
 echo "🔓 5. Configuring Inbound Rule for SSH (Port 22)..."
 az network nsg rule create --resource-group $RESOURCE_GROUP \
   --nsg-name $NSG_NAME --name Allow-SSH --protocol tcp \
-  --priority 120 --destination-port-range 22 --access allow
+  --direction Inbound --priority 120 --destination-port-range 22 --access allow
+
+echo "🔓 6. Configuring Outbound Rules for Web Traffic (Port 80 & 443)..."
+az network nsg rule create --resource-group $RESOURCE_GROUP \
+  --nsg-name $NSG_NAME --name Allow-HTTP-Outbound --protocol tcp \
+  --direction Outbound --priority 100 --destination-port-range 80 --access allow
+
+az network nsg rule create --resource-group $RESOURCE_GROUP \
+  --nsg-name $NSG_NAME --name Allow-HTTPS-Outbound --protocol tcp \
+  --direction Outbound --priority 110 --destination-port-range 443 --access allow
 
 
 VM_NAME="Group5WebServer"
 ADMIN_USER="azureuser"
 
-echo "⚙️ 6. Creating cloud-init script for automated NGINX setup..."
+echo "⚙️ 7. Creating cloud-init script for automated NGINX setup..."
 cat <<EOF > cloud-init.txt
 #cloud-config
 package_upgrade: true
 packages:
   - nginx
+  - curl
 runcmd:
   - systemctl enable nginx
   - systemctl start nginx
-  - echo "<!DOCTYPE html><html><head><title>Group 5 Unique Website</title><style>body { font-family: 'Segoe UI', sans-serif; text-align: center; margin-top: 50px; background-color: #f9f9f9; color: #333; } h1 { color: #2c3e50; } .container { background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: inline-block; }</style></head><body><div class='container'><h1>Welcome to Group 5's Cloud Deployment!</h1><p>This server was provisioned 100% via Azure CLI.</p><p>Web Server: <strong>NGINX</strong></p><p>Name: Ebenezer Zotoo</p></div></body></html>" > /var/www/html/index.html
+  - curl -fsSL https://raw.githubusercontent.com/ebenzotoo/techcrush-capstone-project/main/Project%202/index.html -o /var/www/html/index.html
+  - systemctl reload nginx
 EOF
 
-echo "💻 7. Deploying the Linux Virtual Machine..."
+echo "💻 8. Deploying the Linux Virtual Machine..."
 az vm create \
   --resource-group $RESOURCE_GROUP \
   --name $VM_NAME \
@@ -65,7 +76,7 @@ az vm create \
   --public-ip-sku Standard \
   --custom-data cloud-init.txt
 
-echo "🔍 8. Fetching the Public IP Address..."
+echo "🔍 9. Fetching the Public IP Address..."
 PUBLIC_IP=$(az vm show --show-details --resource-group $RESOURCE_GROUP --name $VM_NAME --query publicIps -o tsv)
 
 echo "=========================================="
